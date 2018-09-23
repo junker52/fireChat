@@ -20,11 +20,21 @@ export class ChatService {
   cargarMensajes() {
     this.itemsCollection = this.afs.collection<Mensaje>('chats');
     return this.itemsCollection.valueChanges()
-                .pipe(
-                  map((mensajes: Mensaje[]) => {
-                    console.log(mensajes);
-                    this.chats = mensajes;
-                  })
-                );
+      .pipe(
+        map((mensajes: Mensaje[]) => {
+          console.log(mensajes);
+          this.chats = mensajes;
+        })
+      );
+  }
+
+  agregarMensaje( texto: string ) {
+    let mensaje: Mensaje = {
+      nombre: 'Demo',
+      mensaje: texto,
+      fecha: new Date().getTime(),
+    };
+
+    return this.itemsCollection.add(mensaje);
   }
 }
