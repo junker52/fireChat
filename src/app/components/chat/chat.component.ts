@@ -12,14 +12,21 @@ export class ChatComponent implements OnInit {
   constructor(public _cs: ChatService) {
 
     this._cs.cargarMensajes()
-      .subscribe();
+      .subscribe( () => {
+          setTimeout(() => {
+            this.elemento.scrollTop = this.elemento.scrollHeight;
+          }, 20);
+      });
   }
 
   mensaje = '';
 
+  elemento: any;
+
 
 
   ngOnInit() {
+    this.elemento = document.getElementById('app-mensajes');
   }
 
   enviar_mensaje() {
@@ -29,6 +36,7 @@ export class ChatComponent implements OnInit {
     }
 
     this._cs.agregarMensaje(this.mensaje).then(() => {
+      this.mensaje = '';
       console.log('Mensaje OK');
     }).catch((err) => {
       console.log(err);
