@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Mensaje } from '../interface/mensaje';
+
 
 @Injectable({
   providedIn: 'root'
@@ -8,14 +11,20 @@ import { Observable } from 'rxjs';
 export class ChatService {
 
   private itemsCollection: AngularFirestoreCollection<any>;
-  items: Observable<any[]>;
+  items: Observable<Mensaje[]>;
 
-  public chats: any[];
+  public chats: Mensaje[];
 
   constructor(private afs: AngularFirestore) { }
 
   cargarMensajes() {
-    this.itemsCollection = this.afs.collection<any>('chats');
-    return this.itemsCollection.valueChanges();
+    this.itemsCollection = this.afs.collection<Mensaje>('chats');
+    return this.itemsCollection.valueChanges()
+                .pipe(
+                  map((mensajes: Mensaje[]) => {
+                    console.log(mensajes);
+                    this.chats = mensajes;
+                  })
+                );
   }
 }

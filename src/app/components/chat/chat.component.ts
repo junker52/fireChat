@@ -12,9 +12,7 @@ export class ChatComponent implements OnInit {
   constructor(public _cs: ChatService) {
 
     this._cs.cargarMensajes()
-      .subscribe((mensajes: any[]) => {
-        console.log(mensajes);
-      });
+      .subscribe();
   }
 
   mensaje = '';
