@@ -23,7 +23,7 @@ export class ChatService {
   constructor(private afs: AngularFirestore,
      public afAuth: AngularFireAuth) {
       this.afAuth.authState.subscribe(user => {
-          console.log(user);
+          console.log('Info ' + user);
           if (!user) {
             return;
           }
@@ -34,10 +34,15 @@ export class ChatService {
   }
 
   login(proveedor: string) {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    if (proveedor === 'Google') {
+      this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    } else {
+      this.afAuth.auth.signInWithPopup(new auth.TwitterAuthProvider());
+    }
   }
 
   logout() {
+    this.usuario = {};
     this.afAuth.auth.signOut();
   }
 
@@ -50,7 +55,7 @@ export class ChatService {
           console.log(mensajes);
           this.chats = [];
           for (const mensaje of mensajes) {
-            //Lo cargamos en primera posicion.
+            // Lo cargamos en primera posicion.
             this.chats.unshift(mensaje);
           }
           return this.chats;
@@ -59,7 +64,7 @@ export class ChatService {
   }
 
   agregarMensaje(texto: string) {
-    let mensaje: Mensaje = {
+    const mensaje: Mensaje = {
       nombre: 'Demo',
       mensaje: texto,
       fecha: new Date().getTime(),
